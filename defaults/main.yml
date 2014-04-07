@@ -1,0 +1,22 @@
+---
+grafana_owner: www-data
+  
+grafana_git_url: https://github.com/torkelo/grafana.git
+grafana_git_branch: master
+grafana_root_path: /var/www/grafana
+grafana_default_route: /dashboard/file/default.json
+grafana_index: grafana-dash
+
+grafana_elasticsearch_url: http://127.0.0.1:9200
+grafana_graphite_url: http://127.0.0.1:8080
+
+grafana_nginx_config_name: grafana.conf
+grafana_nginx_config_path: /etc/nginx/sites-enabled
+grafana_nginx_listen: 127.0.0.1
+grafana_nginx_server_name: 127.0.0.1
+grafana_nginx_access_log: false
+grafana_nginx_error_log: false
+grafana_nginx_enable_ssl: false
+grafana_nginx_ssl_cert_path: ""
+grafana_nginx_ssl_key_path: ""
+grafana_nginx_http_auth_file: false

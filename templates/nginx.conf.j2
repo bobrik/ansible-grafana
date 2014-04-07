@@ -1,0 +1,58 @@
+{% if grafana_nginx_enable_ssl %}
+server {
+    listen {{ grafana_nginx_listen }};
+    server_name {{ grafana_nginx_server_name }};
+
+    return 301 https://{{ grafana_nginx_server_name }}$request_uri;
+}
+{% endif %}
+
+server {
+    {% if grafana_nginx_enable_ssl %}
+    listen {{ grafana_nginx_listen }}:443 ssl;
+    {% else %}
+    listen {{ grafana_nginx_listen }};
+    {% endif %}
+
+    server_name {{ grafana_nginx_server_name }};
+
+    {% if grafana_nginx_enable_ssl %}
+    ssl_protocols SSLv3 TLSv1 TLSv1.1 TLSv1.2;
+    ssl_certificate {{ grafana_nginx_ssl_cert_path }};
+    ssl_certificate_key {{ grafana_nginx_ssl_key_path }};
+    ssl_ciphers ALL:!aNULL:!ADH:!eNULL:!LOW:!EXP:RC4+RSA:+HIGH:+MEDIUM;
+    ssl_session_cache shared:SSL:10m;
+    {% endif %}
+
+    proxy_read_timeout 120s; # slow queries happen
+
+    {% if grafana_nginx_access_log %}
+    access_log {{ grafana_nginx_access_log }};
+    {% endif %}
+
+    {% if grafana_nginx_error_log %}
+    error_log {{ grafana_nginx_error_log }};
+    {% endif %}
+
+    {% if grafana_nginx_http_auth_file %}
+    auth_basic "Beep boop, password please!";
+    auth_basic_user_file {{ grafana_nginx_http_auth_file }};
+    {% endif %}
+
+    expires -1;
+
+    location / {
+        root {{ grafana_root_path }}/dist;
+    }
+
+    location /es/{{ grafana_index }}/ {
+        rewrite ^/es/({{ grafana_index }}/.*)$ /$1 break;
+        proxy_pass {{ grafana_elasticsearch_url }};
+    }
+
+    location /graphite/ {
+        rewrite ^/graphite/(.*)$ /$1 break;
+        proxy_pass {{ grafana_graphite_url }};
+    }
+
+}

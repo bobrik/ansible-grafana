@@ -1,0 +1,25 @@
+---
+# just trigger actual build process
+- name: rebuild grafana {{ grafana_root_path }}
+  command: /bin/true
+  notify:
+    - install npm modules {{ grafana_root_path }}
+    - install grunt-cli {{ grafana_root_path }}
+    - update npm modules {{ grafana_root_path }}
+    - grunt build {{ grafana_root_path }}
+    - chown grafana dir {{ grafana_root_path }}
+    - make config for grafana {{ grafana_root_path }}
+
+
+- name: install npm modules {{ grafana_root_path }}
+  command: chdir={{ grafana_root_path }} npm install
+- name: install grunt-cli {{ grafana_root_path }}
+  command: chdir={{ grafana_root_path }} npm install grunt-cli
+- name: update npm modules {{ grafana_root_path }}
+  command: chdir={{ grafana_root_path }} npm update
+- name: grunt build {{ grafana_root_path }}
+  command: chdir={{ grafana_root_path }} ./node_modules/.bin/grunt build
+- name: make config for grafana {{ grafana_root_path }}
+  template: src=grafana.js.j2 dest={{ grafana_root_path }}/dist/config.js owner={{ grafana_owner }}
+- name: chown grafana dir {{ grafana_root_path }}
+  file: path={{ grafana_root_path }} state=directory owner={{ grafana_owner }} recurse=yes

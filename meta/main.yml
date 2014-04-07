@@ -1,0 +1,10 @@
+---
+galaxy_info:
+  author: Ian Babrou
+  description: Grafana role for ansible
+  license: MIT
+  min_ansible_version: 1.4
+  categories:
+  - monitoring
+  - web
+dependencies: []

@@ -1,0 +1,8 @@
+---
+- name: make config for nginx
+  template: src=nginx.conf.j2
+            dest={{ grafana_nginx_config_path }}/{{ grafana_nginx_config_name }}
+            owner={{ grafana_owner }}
+            mode=0644
+  notify:
+    - reload nginx

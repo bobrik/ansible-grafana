@@ -1,3 +1,6 @@
 ---
 - include: grafana.yml
+  when: grafana_version is not defined
+- include: grafana_tarball.yml
+  when: grafana_version is defined
 - include: nginx.yml

@@ -15,6 +15,7 @@ Role Variables
 --------------
 
 * `grafana_owner` basically nginx user, `www-data` by default
+* `grafana_version` if defined, install this version via binary rather than building from git
 * `grafana_git_url` git url for grafana, set to upstream by default
 * `grafana_git_branch` git branch to track, set to master by default
 * `grafana_root_path` path to clone grafana, `/var/www/grafana` by default
@@ -38,7 +39,31 @@ Minimal installation on ubuntu requires none of variables to be set, it will wor
 Dependencies
 ------------
 
-It needs working nginx, elasticsearch and node.js to build grafana.
+* nginx
+* elasticsearch
+* (optional) node.js, required if `grafana_version` is not set.
+
+Notes
+-----
+
+## Basic Authentication
+
+Basic authentication may be set up with
+
+    apt: pkg=apache2-utils
+    command: httpasswd -bc {{ grafana_nginx_http_auth_file }} username password
+
+## Self-Signed Certificate
+
+You can create a self-signed certificate to use for SSL:
+
+    - command: openssl genrsa -out {{ grafana_nginx_ssl_key_path }} 2048 creates={{ grafana_nginx_ssl_key_path }}
+    - command: openssl req -new -key {{ grafana_nginx_ssl_key_path }} -out {{ grafana_nginx_ssl_csr_path }} -subj "/C={{ country_code }}/ST={{ state }}/L={{ location }}/O={{ organication }}/OU={{ organizational_unit }}/CN={{ cname }}" creates={{ grafana_nginx_ssl_csr_path }}
+    - command: openssl x509 -req -days 365 -in {{ grafana_nginx_ssl_csr_path }} -signkey {{ grafana_nginx_ssl_key_path }} -out {{ grafana_nginx_ssl_cert_path }} creates={{ grafana_nginx_ssl_cert_path }}
+
+## Listen Address
+
+The default installation only listens on 127.0.0.1, so is not externally accessible.  To make your server publicly accessible, set `grafana_nginx_listen` to `0.0.0.0`.  If you do this, it's strongly recommended that you also set `grafana_nginx_enable_ssl` and `grafana_nginx_http_auth_file` to password protect the site and ensure that the password is not sent in the clear.
 
 License
 -------
@@ -49,3 +74,4 @@ Author Information
 ------------------
 
 * Ian Babrou, ibobrik@gmail.com
+* Bryan Larsen, bryan@larsen.st

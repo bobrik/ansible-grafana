@@ -9,5 +9,3 @@
     - rebuild grafana {{ grafana_root_path }}
 - name: make dist dir
   file: path={{ grafana_root_path }}/dist state=directory owner={{ grafana_owner }}
-- name: make config for grafana
-  template: src=grafana.js.j2 dest={{ grafana_root_path }}/dist/config.js owner={{ grafana_owner }}

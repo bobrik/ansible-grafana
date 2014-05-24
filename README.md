@@ -50,16 +50,20 @@ Notes
 
 Basic authentication may be set up with
 
-    apt: pkg=apache2-utils
-    command: httpasswd -bc {{ grafana_nginx_http_auth_file }} username password
+```
+apt: pkg=apache2-utils
+command: httpasswd -bc {{ grafana_nginx_http_auth_file }} username password
+```
 
 ## Self-Signed Certificate
 
 You can create a self-signed certificate to use for SSL:
 
-    - command: openssl genrsa -out {{ grafana_nginx_ssl_key_path }} 2048 creates={{ grafana_nginx_ssl_key_path }}
-    - command: openssl req -new -key {{ grafana_nginx_ssl_key_path }} -out {{ grafana_nginx_ssl_csr_path }} -subj "/C={{ country_code }}/ST={{ state }}/L={{ location }}/O={{ organication }}/OU={{ organizational_unit }}/CN={{ cname }}" creates={{ grafana_nginx_ssl_csr_path }}
-    - command: openssl x509 -req -days 365 -in {{ grafana_nginx_ssl_csr_path }} -signkey {{ grafana_nginx_ssl_key_path }} -out {{ grafana_nginx_ssl_cert_path }} creates={{ grafana_nginx_ssl_cert_path }}
+```
+- command: openssl genrsa -out {{ grafana_nginx_ssl_key_path }} 2048 creates={{ grafana_nginx_ssl_key_path }}
+- command: openssl req -new -key {{ grafana_nginx_ssl_key_path }} -out {{ grafana_nginx_ssl_csr_path }} -subj "/C={{ country_code }}/ST={{ state }}/L={{ location }}/O={{ organication }}/OU={{ organizational_unit }}/CN={{ cname }}" creates={{ grafana_nginx_ssl_csr_path }}
+- command: openssl x509 -req -days 365 -in {{ grafana_nginx_ssl_csr_path }} -signkey {{ grafana_nginx_ssl_key_path }} -out {{ grafana_nginx_ssl_cert_path }} creates={{ grafana_nginx_ssl_cert_path }}
+```
 
 ## Listen Address
 

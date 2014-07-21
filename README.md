@@ -52,7 +52,7 @@ Basic authentication may be set up with
 
 ```
 apt: pkg=apache2-utils
-command: httpasswd -bc {{ grafana_nginx_http_auth_file }} username password
+command: htpasswd -bc {{ grafana_nginx_http_auth_file }} username password
 ```
 
 ## Self-Signed Certificate

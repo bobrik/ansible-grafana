@@ -17,7 +17,7 @@ server {
     server_name {{ grafana_nginx_server_name }};
 
     {% if grafana_nginx_enable_ssl %}
-    ssl_protocols SSLv3 TLSv1 TLSv1.1 TLSv1.2;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_certificate {{ grafana_nginx_ssl_cert_path }};
     ssl_certificate_key {{ grafana_nginx_ssl_key_path }};
     ssl_ciphers ALL:!aNULL:!ADH:!eNULL:!LOW:!EXP:RC4+RSA:+HIGH:+MEDIUM;
